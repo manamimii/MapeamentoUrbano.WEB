@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://api-lovat-tau-30.vercel.app/",
+  baseURL: "https://api-lovat-tau-30.vercel.app/api/",
   timeout: 30000,
 });
 
