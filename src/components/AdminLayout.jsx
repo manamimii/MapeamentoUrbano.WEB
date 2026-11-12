@@ -9,6 +9,7 @@ import {
   X,
   UserCircle,
   CalendarDays,
+  Trophy,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -78,18 +79,29 @@ export default function AdminLayout() {
             <UsersRound size={20} />
             <span>Gerência de Usuários</span>
           </NavLink>
-        </nav>
 
-        <NavLink
-            to="/eventos"
-            onClick={() => setMenuOpen(false)}
-            className={({ isActive }) =>
+          <NavLink
+              to="/eventos"
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
                 `nav-item ${isActive ? "active" : ""}`
             }
             >
-            <CalendarDays size={20} />
-            <span>Gerência de Eventos</span>
-        </NavLink>
+              <CalendarDays size={20} />
+              <span>Gerência de Eventos</span>
+          </NavLink>
+
+          <NavLink
+            to="/premiacoes"
+            onClick={() => setMenuOpen(false)}
+            className={({ isActive }) =>
+              `nav-item ${isActive ? "active" : ""}`
+          }
+          >
+            <Trophy size={20} />
+            <span>Gerência de Premiações</span>
+          </NavLink>
+        </nav>
 
         <div className="sidebar-bottom">
           <div className="sidebar-user">

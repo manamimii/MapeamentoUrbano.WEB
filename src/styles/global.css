@@ -196,21 +196,6 @@ a {
   color: #64748b;
 }
 
-.sidebar-nav {
-  padding: 0 12px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 14px;
-  margin-bottom: 5px;
-  border-radius: 9px;
-  font-size: 13px;
-  transition: background 0.2s;
-}
-
 .nav-item:hover {
   background: #ffffff10;
 }
@@ -1074,4 +1059,382 @@ a.dashboard-card:hover {
   .event-modal-header {
     padding: 18px;
   }
+}
+
+/* PREMIAÇÕES */
+
+.award-header-icon {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.awards-table th:first-child {
+  width: 40%;
+}
+
+.award-date-cell {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-weight: 500;
+  color: #334155;
+}
+
+.award-date-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: #64748b;
+  border-radius: 9px;
+}
+
+.award-winner-cell {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.award-gold-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fef3c7;
+  color: #d97706;
+  border-radius: 50%;
+}
+
+.award-winner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.award-winner-info strong {
+  color: #1e293b;
+  font-size: 13px;
+}
+
+.award-winner-info span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #b45309;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .awards-table {
+    min-width: 450px;
+  }
+}
+
+/* MODAL DE PREMIAÇÃO */
+
+.award-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.award-modal {
+  width: 100%;
+  max-width: 700px;
+  max-height: 95vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+}
+
+.award-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px 30px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.award-modal-header h2 {
+  margin: 0 0 7px;
+  font-size: 19px;
+  color: #1e293b;
+}
+
+.award-modal-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.award-modal-header button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #64748b;
+}
+
+.award-modal-body {
+  padding: 35px 30px 30px;
+}
+
+.podium-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #d4a017;
+}
+
+.podium-heading h3 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 20px;
+}
+
+/* PÓDIO */
+
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 8px;
+  margin-top: 45px;
+}
+
+.podium-position {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.podium-person {
+  height: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 4px 15px;
+  text-align: center;
+}
+
+.podium-person strong {
+  font-size: 14px;
+  color: #1e293b;
+  overflow-wrap: anywhere;
+}
+
+.podium-person span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.podium-person .podium-empty {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.podium-crown {
+  color: #d4a017;
+}
+
+.podium-medal {
+  width: 65px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.podium-medal.gold {
+  color: #b8860b;
+  background: #fef3c7;
+}
+
+.podium-medal.silver {
+  color: #64748b;
+  background: #e2e8f0;
+}
+
+.podium-medal.bronze {
+  color: #b45309;
+  background: #ffedd5;
+}
+
+.podium-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: white;
+  border-radius: 9px 9px 0 0;
+}
+
+.podium-step strong {
+  font-size: 42px;
+  line-height: 1;
+}
+
+.podium-step span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.podium-step.gold {
+  height: 165px;
+  background: linear-gradient(145deg, #f0c34e, #c99717);
+}
+
+.podium-step.silver {
+  height: 120px;
+  background: linear-gradient(145deg, #cbd5e1, #94a3b8);
+}
+
+.podium-step.bronze {
+  height: 85px;
+  background: linear-gradient(145deg, #d69b65, #a9602c);
+}
+
+.award-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 30px;
+  border-top: 1px solid #e2e8f0;
+}
+
+@media (max-width: 600px) {
+  .award-modal-body {
+    padding: 25px 12px;
+  }
+
+  .award-modal-header {
+    padding: 20px;
+  }
+
+  .podium {
+    gap: 4px;
+    margin-top: 25px;
+  }
+
+  .podium-person {
+    height: 155px;
+  }
+
+  .podium-person strong {
+    font-size: 11px;
+  }
+
+  .podium-medal {
+    width: 48px;
+    height: 48px;
+  }
+
+  .podium-step strong {
+    font-size: 30px;
+  }
+
+  .podium-step span {
+    font-size: 9px;
+  }
+
+  .podium-step.gold {
+    height: 125px;
+  }
+
+  .podium-step.silver {
+    height: 95px;
+  }
+
+  .podium-step.bronze {
+    height: 70px;
+  }
+}
+
+/* PONTUAÇÃO DO PÓDIO */
+
+.podium-points {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.podium-points.gold {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.podium-points.silver {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.podium-points.bronze {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+@media (max-width: 600px) {
+  .podium-points {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+}
+
+/* ALINHAMENTO DEFINITIVO DO MENU LATERAL */
+
+.sidebar-nav {
+  padding: 0 12px;
+}
+
+.sidebar-nav .nav-item {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 14px;
+
+  width: 100%;
+  min-height: 48px;
+  padding: 14px 12px;
+  margin-bottom: 5px;
+
+  border-radius: 9px;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.sidebar-nav .nav-item > svg {
+  width: 20px;
+  height: 20px;
+  justify-self: center;
+  flex-shrink: 0;
+}
+
+.sidebar-nav .nav-item > span {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  line-height: 20px;
+  text-align: left;
 }

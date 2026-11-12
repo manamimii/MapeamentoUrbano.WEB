@@ -14,6 +14,7 @@ import Home from "./pages/Home";
 import Users from "./pages/Users";
 import UserForm from "./pages/UserForm";
 import Events from "./pages/Events";
+import Awards from "./pages/Awards";
 
 export default function App() {
   return (
@@ -30,7 +31,8 @@ export default function App() {
               <Route path="/usuarios" element={<Users />} />
               <Route path="/usuarios/novo" element={<UserForm />} />
               <Route path="/usuarios/editar/:id" element={<UserForm />} />
-             <Route path="/eventos" element={<Events />} />
+              <Route path="/eventos" element={<Events />} />
+              <Route path="/premiacoes" element={<Awards />} />
             </Route>
           </Route>
 
