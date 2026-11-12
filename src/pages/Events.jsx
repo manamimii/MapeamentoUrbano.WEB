@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CalendarDays,
   RefreshCw,
@@ -8,23 +9,40 @@ import {
   MapPin,
   UserRound,
   Eye,
+  Pencil,
   X,
 } from "lucide-react";
+
 import { api } from "../services/api";
+import {
+  getEventStatus,
+  canEvaluateEvent,
+} from "../utils/eventStatus";
 
-function getPhotoUrl(photo) {
-  if (!photo) return null;
-
-  if (photo.startsWith("data:image/")) {
-    return photo;
+export function getPhotoUrl(photo) {
+  if (!photo || typeof photo !== "string") {
+    return null;
   }
 
-  // Base64 puro recebido da API.
-  // Caso todas as fotos sejam JPEG, este prefixo é suficiente.
-  return `data:image/jpeg;base64,${photo}`;
+  const value = photo.trim();
+
+  if (value.startsWith("data:image/")) {
+    return value;
+  }
+
+  if (
+    value.startsWith("https://") ||
+    value.startsWith("http://")
+  ) {
+    return value;
+  }
+
+  return `data:image/jpeg;base64,${value.replace(/\s/g, "")}`;
 }
 
 export default function Events() {
+  const navigate = useNavigate();
+
   const [events, setEvents] = useState([]);
   const [sortOrder, setSortOrder] = useState("");
   const [pageSize, setPageSize] = useState(10);
@@ -46,7 +64,7 @@ export default function Events() {
       try {
         const response = await api.get("Event/Paginated", {
           params: {
-            sortOrder,
+            ...(sortOrder ? { sortOrder } : {}),
             pageSize,
             pageIndex,
           },
@@ -104,7 +122,19 @@ export default function Events() {
   );
 
   function handleRefresh() {
-    setRefreshKey((value) => value + 1);
+    setRefreshKey((previous) => previous + 1);
+  }
+
+  function handleEvaluate(event) {
+    if (!canEvaluateEvent(event.status)) return;
+
+    navigate(`/eventos/avaliar/${event.id}`, {
+      state: { event },
+    });
+  }
+
+  function handleView(event) {
+    setSelectedEvent(event);
   }
 
   return (
@@ -112,8 +142,8 @@ export default function Events() {
       <div className="page-heading">
         <h1>Gerência de Eventos</h1>
         <p>
-          Visualize os eventos registrados pelos usuários
-          do Mapeamento Urbano.
+          Visualize e avalie os eventos registrados
+          pelos usuários do Mapeamento Urbano.
         </p>
       </div>
 
@@ -169,6 +199,7 @@ export default function Events() {
                 <th>DESCRIÇÃO</th>
                 <th>USUÁRIO</th>
                 <th>PONTOS</th>
+                <th>STATUS</th>
                 <th className="actions-column">AÇÕES</th>
               </tr>
             </thead>
@@ -176,68 +207,99 @@ export default function Events() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="empty-state">
+                  <td colSpan={6} className="empty-state">
                     Carregando eventos...
                   </td>
                 </tr>
               ) : events.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="empty-state">
+                  <td colSpan={6} className="empty-state">
                     Nenhum evento encontrado.
                   </td>
                 </tr>
               ) : (
-                events.map((event) => (
-                  <tr key={event.id}>
-                    <td>
-                      {event.photo ? (
-                        <img
-                          src={getPhotoUrl(event.photo)}
-                          alt="Foto do evento"
-                          className="event-thumbnail"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="event-no-image">
-                          <ImageOff size={22} />
+                events.map((event) => {
+                  const status = getEventStatus(event.status);
+                  const canEvaluate = canEvaluateEvent(
+                    event.status
+                  );
+
+                  return (
+                    <tr key={event.id}>
+                      <td>
+                        {event.photo ? (
+                          <img
+                            src={getPhotoUrl(event.photo)}
+                            alt="Foto do evento"
+                            className="event-thumbnail"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="event-no-image">
+                            <ImageOff size={22} />
+                          </div>
+                        )}
+                      </td>
+
+                      <td>
+                        <div className="event-description">
+                          {event.description ||
+                            "Sem descrição"}
                         </div>
-                      )}
-                    </td>
+                      </td>
 
-                    <td>
-                      <div className="event-description">
-                        {event.description || "Sem descrição"}
-                      </div>
-                    </td>
+                      <td>
+                        <div className="email-cell">
+                          <UserRound size={16} />
+                          {event.user || "Não informado"}
+                        </div>
+                      </td>
 
-                    <td>
-                      <div className="email-cell">
-                        <UserRound size={16} />
-                        {event.user || "Não informado"}
-                      </div>
-                    </td>
+                      <td>
+                        <span className="event-points">
+                          <MapPin size={15} />
+                          {event.points ?? 0}
+                        </span>
+                      </td>
 
-                    <td>
-                      <span className="event-points">
-                        <MapPin size={15} />
-                        {event.points ?? 0}
-                      </span>
-                    </td>
-
-                    <td className="actions-column">
-                      <div className="user-actions">
-                        <button
-                          className="action-button edit"
-                          title="Visualizar evento"
-                          aria-label="Visualizar evento"
-                          onClick={() => setSelectedEvent(event)}
+                      <td>
+                        <span
+                          className={`event-status ${status.className}`}
                         >
-                          <Eye size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                          {status.label}
+                        </span>
+                      </td>
+
+                      <td className="actions-column">
+                        <div className="user-actions">
+                          <button
+                            type="button"
+                            className="action-button edit"
+                            title="Visualizar evento"
+                            aria-label="Visualizar evento"
+                            onClick={() => handleView(event)}
+                          >
+                            <Eye size={18} />
+                          </button>
+
+                          {canEvaluate && (
+                            <button
+                              type="button"
+                              className="action-button evaluate"
+                              title="Avaliar evento"
+                              aria-label="Avaliar evento"
+                              onClick={() =>
+                                handleEvaluate(event)
+                              }
+                            >
+                              <Pencil size={17} />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
@@ -284,7 +346,9 @@ export default function Events() {
             </span>
 
             <button
-              disabled={pageIndex >= totalPages || loading}
+              disabled={
+                pageIndex >= totalPages || loading
+              }
               onClick={() =>
                 setPageIndex((previous) => previous + 1)
               }
@@ -295,7 +359,6 @@ export default function Events() {
         </div>
       </div>
 
-      {/* MODAL DE VISUALIZAÇÃO */}
       {selectedEvent && (
         <div
           className="event-modal-overlay"
@@ -312,6 +375,7 @@ export default function Events() {
               <h2>Detalhes do Evento</h2>
 
               <button
+                type="button"
                 onClick={() => setSelectedEvent(null)}
                 aria-label="Fechar"
               >
@@ -351,6 +415,18 @@ export default function Events() {
               <div className="event-detail">
                 <strong>Pontos</strong>
                 <p>{selectedEvent.points ?? 0}</p>
+              </div>
+
+              <div className="event-detail">
+                <strong>Status</strong>
+                <span
+                  className={`event-status ${
+                    getEventStatus(selectedEvent.status)
+                      .className
+                  }`}
+                >
+                  {getEventStatus(selectedEvent.status).label}
+                </span>
               </div>
 
               <div className="event-detail">

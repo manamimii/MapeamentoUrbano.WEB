@@ -15,6 +15,8 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
+  const isMaster =
+    String(user?.role ?? "").trim().toLowerCase() === "master";
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -69,16 +71,18 @@ export default function AdminLayout() {
             <span>Home</span>
           </NavLink>
 
-          <NavLink
-            to="/usuarios"
-            onClick={() => setMenuOpen(false)}
-            className={({ isActive }) =>
-              `nav-item ${isActive ? "active" : ""}`
-            }
-          >
-            <UsersRound size={20} />
-            <span>Gerência de Usuários</span>
-          </NavLink>
+          {isMaster && (
+            <NavLink
+              to="/usuarios"
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `nav-item ${isActive ? "active" : ""}`
+              }
+            >
+              <UsersRound size={20} />
+              <span>Gerência de Usuários</span>
+            </NavLink>
+          )}
 
           <NavLink
               to="/eventos"

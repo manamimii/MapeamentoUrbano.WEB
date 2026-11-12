@@ -15,6 +15,8 @@ import Users from "./pages/Users";
 import UserForm from "./pages/UserForm";
 import Events from "./pages/Events";
 import Awards from "./pages/Awards";
+import EventEvaluation from "./pages/EventEvaluation";
+import MasterRoute from "./components/MasterRoute";
 
 export default function App() {
   return (
@@ -24,22 +26,25 @@ export default function App() {
           {/* Rotas públicas */}
           <Route path="/login" element={<Login />} />
 
-          {/* Rotas privadas */}
+          {/* Rotas privadas */}      
           <Route element={<ProtectedRoute />}>
             <Route element={<AdminLayout />}>
               <Route path="/" element={<Home />} />
-              <Route path="/usuarios" element={<Users />} />
-              <Route path="/usuarios/novo" element={<UserForm />} />
-              <Route path="/usuarios/editar/:id" element={<UserForm />} />
+
               <Route path="/eventos" element={<Events />} />
+              <Route path="/eventos/avaliar/:id" element={<EventEvaluation />} />
               <Route path="/premiacoes" element={<Awards />} />
+
+              {/* Rotas exclusivas do Master */}
+              <Route element={<MasterRoute />}>
+                <Route path="/usuarios" element={<Users />} />
+                <Route path="/usuarios/novo" element={<UserForm />} />
+                <Route path="/usuarios/editar/:id" element={<UserForm />} />
+              </Route>
             </Route>
           </Route>
 
-          <Route
-            path="*"
-            element={<Navigate to="/" replace />}
-          />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
